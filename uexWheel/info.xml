@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uexplugins>
+    <plugin
+        uexName="uexWheel" version="3.0.5" build="5">
+        <info>5:修复在低端机上调用接口崩溃的问题</info>
+        <build>4:修改openQuartercircle接口参数</build>
+        <build>3:初始版本</build>
+    </plugin>
+</uexplugins>
