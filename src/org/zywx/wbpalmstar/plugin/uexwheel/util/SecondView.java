@@ -42,17 +42,19 @@ public class SecondView extends View implements OnTouchListener {
 	private Bitmap[] mData;
 	private Bitmap iconBg;
 	private int mCount;
-	
+	private float x1 = 0f, y1 = 0f, x2 = 0f, y2 = 0f;
+	private boolean isClick = true;
+	private long time = 0l;
 
 	public void setOnTurnplateListener(OnTurnplateListener onTurnplateListener) {
 		this.onTurnplateListener = onTurnplateListener;
 	}
 
-	public SecondView(Context context, int px, int py, int radius, Bitmap[] data, Bitmap bm) {
+	public SecondView(Context context, int w, int h, int radius, Bitmap[] data, Bitmap bm) {
 		super(context);
-		mPointX = px;
-		mPointY = py;
-		mRadius = 160;
+		mPointX = w;
+		mPointY = h;
+		mRadius = radius;
 	    this.mData = data;
 	    this.iconBg = bm;
 	    if(mData.length <= 6){
@@ -64,7 +66,6 @@ public class SecondView extends View implements OnTouchListener {
 		initPaints();// 初始化画笔
 		initPoints();
 		computeCoordinates();// 计算每个点的坐标
-
 	}
 
 	/**
@@ -82,20 +83,20 @@ public class SecondView extends View implements OnTouchListener {
 	 * 加载bitmap
 	 */
 	public void loadBitmaps(int key, Drawable d) {
-		Bitmap bitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(mRadius * 3 /5, mRadius * 3 /5, Bitmap.Config.ARGB_8888);
 		Matrix m = new Matrix();
 		m.setRotate(180);
 		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
 				bitmap.getHeight(), m, true);
 		Canvas canvas = new Canvas(bitmap);
-		d.setBounds(0, 0, 80, 80);
+		d.setBounds(0, 0, mRadius * 3 /5, mRadius * 3 /5);
 		d.draw(canvas);
 		icons[key] = bitmap;
 	}
 
 	public void initDraw() {
 		bitmap = iconBg;
-		bitmap = Bitmap.createScaledBitmap(bitmap, 450, 472, true);
+		bitmap = Bitmap.createScaledBitmap(bitmap, mRadius * 3, mRadius * 3, true);
 	}
 
 	/**
@@ -234,8 +235,6 @@ public class SecondView extends View implements OnTouchListener {
             default:
                 break;
             }
-			
-			
 			if (point != null) {
 				point.x = mPointX
 						+ (float) (mRadius * Math.cos(point.angle * Math.PI
@@ -275,7 +274,7 @@ public class SecondView extends View implements OnTouchListener {
 		for (Point point : AllPoints) {
 			if (point != null && point.angle == 270) {
 				// 找到最顶端的点
-				onTurnplateListener.onPointTouch(point);
+				onTurnplateListener.onPointTouch(point.flag);
 				break;
 			}
 		}
@@ -289,20 +288,43 @@ public class SecondView extends View implements OnTouchListener {
 		int action = event.getAction();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
+		    time = System.currentTimeMillis();
+		    isClick = true;
+		    x1 = event.getX();
+		    y1 = event.getY();
 			invalidate();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			computeCoordinates();
-			resetPointAngle(event.getX(), event.getY());
-			invalidate();
+            x2 = event.getX();
+            y2 = event.getY();
+            if(isClick && ((Math.abs(x2 - x1) > 20 || Math.abs(y2 - y1) > 20))){
+                isClick = false;
+            }
+            if(!isClick){
+                computeCoordinates();
+                resetPointAngle(event.getX(), event.getY());
+                invalidate();
+            }
 			break;
 		case MotionEvent.ACTION_UP:
-			tempDegree = 0;
+		    if((System.currentTimeMillis() - time) < 100){
+		        isClick = true;
+		    }
+		    if(isClick){
+		        if(Math.abs(x2 - mPointX) < mRadius * 3 / 8 && Math.abs(y2 - mPointY) < mRadius * 3 / 8){
+		            onTurnplateListener.onPointTouch(-1);
+		            return true;
+		        }
+                if(Math.abs(x2 - mPointX) < mRadius * 3 / 8 && mPointY - y2 > mRadius * 3 / 8){
+                    switchScreen(event);
+                }
+		        return true;
+		    }
 			resetPointAngle(event.getX(), event.getY());
 			computeState();
 			invalidate();
-			switchScreen(event);
-			Log.i("ACTION_UP", "UP");
+			//switchScreen(event);
+	        tempDegree = 0;
 			break;
 		case MotionEvent.ACTION_CANCEL:
 			break;
@@ -345,7 +367,7 @@ public class SecondView extends View implements OnTouchListener {
 
 	// 选中处理的接口
 	public static interface OnTurnplateListener {
-		public void onPointTouch(Point point);
+		public void onPointTouch(int index);
 	}
 
 	@Override

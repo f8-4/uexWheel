@@ -34,22 +34,27 @@
                     <div class="umh1"></div>
                     <div class="uin" id="height">
                         <div class="ub btn bc-text-head bc-btn ub-ac ub-pc" id="btn1">
-                            打开全圆轮盘菜单
+                            打开全圆轮盘菜单-全圆
                         </div>
                     </div>
                     <div class="umh1"></div>
-                    <div class="uin">
+                    <div class="uin" id="height">
                         <div class="ub btn bc-text-head bc-btn ub-ac ub-pc" id="btn2">
+                            打开全圆轮盘菜单-半圆
+                        </div>
+                    </div>
+                    <div class="umh1"></div>
+                    <div class="uin" id="height">
+                        <div class="ub btn bc-text-head bc-btn ub-ac ub-pc" id="btn3">
                             打开半圆轮盘菜单
                         </div>
                     </div>
                     <div class="umh1"></div>
-                    <div class="uin">
-                        <div class="ub btn bc-text-head bc-btn ub-ac ub-pc" id="btn3">
+                    <div class="uin" id="height">
+                        <div class="ub btn bc-text-head bc-btn ub-ac ub-pc" id="btn4">
                             打开四分之一圆轮盘菜单
                         </div>
-                    </div>
-                    <div class="umh1"></div>
+                    </div>                    
                 </div>
             </div>
             <!--content开始-->
@@ -62,16 +67,16 @@
         <script src="js/appcan.control.js"></script>
     </body>
     <script>
-    var quanyuan=false;
-     var banyuan=false;
-      var sifen=false;
         var titHeight = 0;
         appcan.ready(function() {
             titHeight = $('#header').offset().height;
-            uexWheel.cbSelect = function(opId, dataType, data) {
-                
-                //alert(data);
+            uexWheel.cbSelect = function(index1, index2) {
+                alert(index1 + ", " + index2);
             }
+            uexWheel.onClick = function(data) {
+                appcan.window.open('API', 'uexWheel.html', 10);
+            }            
+            //uexWidget.startWidget("123456789", "2", "pluginCallback", "plugin 插件调用");
         })
         appcan.button(".nav-btn", "btn-act", function(a, b) {
             var btn = $(a.currentTarget);
@@ -80,11 +85,10 @@
                 appcan.window.close(-1);
             } else {
                 appcan.setLocVal('title', 'uexWheel');
-                appcan.window.open('API', '../API.html', 10);
+                appcan.window.open('API', 'uexWheel.html', 10);
             }
         });
          function openSemicircleMenu() {
-             banyuan=true;
             var data = '{"data":[{"image": "res://semicircle/plugin_uexwheel1_1.png","title": "短信"},{"image": "res://semicircle/plugin_uexwheel1_2.png","title": "列表"},{"image": "res://semicircle/plugin_uexwheel1_3.png","title": "拍照"},{"image": "res://semicircle/plugin_uexwheel1_4.png","title": "相册"},{"image": "res://semicircle/plugin_uexwheel1_5.png","title": "视频"}],"background": "res://semicircle/plugin_uexwheel1_bg.png"}';
             var divTop = $('#topDiv')[0].offsetTop + $('#topDiv')[0].offsetHeight + $('#height')[0].offsetHeight;
             // var btheight = $('#height')[0].offsetHeight + $('#heights')[0].offsetHeight;
@@ -94,20 +98,18 @@
             uexWheel.openSemicircle("0", divTop, w, h - divTop, data);
         }
 
-        function openCircleMenu() {
-            quanyuan=true;
-            var data = '{"button":"res://circle/button.png","menuBg":"res://circle/tabbg.png","subMenuBg":"res://circle/iconbg.png","select_1":"res://circle/tabmenufirstbg.png","select_2":"res://circle/tbmenubg.png","menu":[{"img":"res://circle/tab1.png","subMenu":["res://circle/icon5.png","res://circle/icon2.png","res://circle/icon3.png","res://circle/icon4.png","res://circle/icon1.png","res://circle/icon6.png"]},{"img":"res://circle/tab2.png","subMenu":["res://circle/icon5.png","res://circle/icon2.png","res://circle/icon3.png","res://circle/icon4.png","res://circle/icon1.png","res://circle/icon6.png"]},{"img":"res://circle/tab3.png","subMenu":["res://circle/icon5.png","res://circle/icon2.png","res://circle/icon3.png","res://circle/icon4.png","res://circle/icon1.png","res://circle/icon6.png"]},{"img":"res://circle/tab4.png","subMenu":["res://circle/icon1.png","res://circle/icon2.png","res://circle/icon3.png","res://circle/icon4.png","res://circle/icon5.png","res://circle/icon6.png"]},{"img":"res://circle/tab5.png","subMenu":["res://circle/icon5.png","res://circle/icon2.png","res://circle/icon3.png","res://circle/icon4.png","res://circle/icon1.png","res://circle/icon6.png"]}]}';
+        function openCircleMenu(type) {
+            var data = '{"button":"res://circle/button.png","menuBg":"res://circle/icon_bg_normal.png","subMenuBg":"res://circle/iconbg.png","iconLeft":"res://circle/left.png","iconSelect":"res://circle/icon_bg_select.png","bgColor":"#00000000","menu":[{"img":"res://circle/tab1.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png"]},{"img":"res://circle/tab2.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png"]},{"img":"res://circle/tab3.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon15.png"]},{"img":"res://circle/tab4.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon15.png","res://circle/icon16.png"]},{"img":"res://circle/tab5.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon12.png","res://circle/icon16.png"]},{"img":"res://circle/tab3.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon15.png"]},{"img":"res://circle/tab3.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon15.png"]},{"img":"res://circle/tab3.png","subMenu":["res://circle/icon11.png","res://circle/icon12.png","res://circle/icon13.png","res://circle/icon14.png","res://circle/icon15.png"]}]}';
             //var divTop = $('#height')[0].offsetHeight;
             var divTop = $('#topDiv')[0].offsetTop + $('#topDiv')[0].offsetHeight + $('#height')[0].offsetHeight;
             // var btheight = $('#height')[0].offsetHeight + $('#heights')[0].offsetHeight;
             var s = window.getComputedStyle(document.body, null);
             var w = parseInt(s.width);
             var h = parseInt(s.height);
-            uexWheel.openCircle('0', divTop, w, h - divTop, data);
-        }
-
+            uexWheel.openCircle('0', divTop, w, h-divTop, data, type);
+        }      
+        
         function openQuartercircleMenu(){
-            sifen=true;
             var data = '{"data":[{"image":"res://quartercircle/plugin_uexwheel2_1.png","title":"视频"},{"image":"res://quartercircle/plugin_uexwheel2_2.png","title":"图片"},{"image":"res://quartercircle/plugin_uexwheel2_3.png","title":"拍照"},{"image":"res://quartercircle/plugin_uexwheel2_4.png","title":"排序"},{"image":"res://quartercircle/plugin_uexwheel2_5.png","title":"信息"},{"image":"res://quartercircle/plugin_uexwheel2_3.png","title":"拍照"}],"openImg":"res://quartercircle/plugin_uexwheel2_bt_plus.png","openTitle":"open","closeImg":"res://quartercircle/plugin_uexwheel2_bt_close.png","closeTitle":"close","rootBg":"res://quartercircle/plugin_wheel2_bg.png","subBg":"res://quartercircle/plugin_uexwheel2_bt_bg.png","textColor":"#cccccc"}';
             var divTop = $('#topDiv')[0].offsetTop + $('#topDiv')[0].offsetHeight + $('#height')[0].offsetHeight;
             // var btheight = $('#height')[0].offsetHeight + $('#heights')[0].offsetHeight;
@@ -118,54 +120,23 @@
         }
 
         appcan.button(".btn", "ani-act", function() {
+            uexWheel.closeCircle();
+            uexWheel.closeSemicircle();
+            uexWheel.closeQuartercircle();
             switch(this.id) {
             case "btn1":
-                if (quanyuan == false && banyuan == false && sifen == false) {
-                    openCircleMenu();
-                } else if (quanyuan == true) {
-
-                } else if (banyuan == true) {
-                    uexWheel.closeSemicircle();
-                    banyuan = false;
-                    openCircleMenu();
-                } else if (sifen == true) {
-                    uexWheel.closeQuartercircle();
-                    sifen = false;
-                    openCircleMenu();
-                }
-
+                openCircleMenu(0);
                 break;
             case "btn2":
-                if (quanyuan == false && banyuan == false && sifen == false) {
-                    openSemicircleMenu();
-                } else if (quanyuan == true) {
-                    uexWheel.closeCircle();
-                    quanyuan = false;
-                    openSemicircleMenu();
-                } else if (banyuan == true) {
-
-                } else if (sifen == true) {
-                    uexWheel.closeQuartercircle();
-                    sifen = false;
-                    openSemicircleMenu();
-                }
+                openCircleMenu(1);
                 break;
             case "btn3":
-                if (quanyuan == false && banyuan == false && sifen == false) {
-                    openQuartercircleMenu();
-                } else if (quanyuan == true) {
-                    uexWheel.closeCircle();
-                    quanyuan = false;
-                    openQuartercircleMenu();
-                } else if (banyuan == true) {
-                    uexWheel.closeSemicircle();
-                    banyuan = false;
-                    openQuartercircleMenu();
-                } else if (sifen == true) {
-
-                }
+                openSemicircleMenu();
                 break;
-            }
+            case "btn4":
+                openQuartercircleMenu();
+                break;
+            }            
         });
  
             

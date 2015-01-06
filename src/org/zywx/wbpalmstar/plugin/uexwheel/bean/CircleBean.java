@@ -7,25 +7,38 @@ import android.graphics.Bitmap;
 
 public class CircleBean {
 
-    public final String BUTTON_TAG = "button";
-    public final String MENUBG_TAG = "menuBg";
-    public final String SUBMENUBG_TAG = "subMenuBg";
-    public final String SELECTEDFIRSTMENUBG_TAG = "select_1";
-    public final String SELECTEDMENUBG_TAG = "select_2";
-    public final String DATA_TAG = "menu";
-    public final String TABICON_TAG = "img";
-    public final String ICONS_TAG = "subMenu";
+    public static final String BUTTON_TAG = "button";
+    public static final String MENUBG_TAG = "menuBg";
+    public static final String SUBMENUBG_TAG = "subMenuBg";
+    public static final String ICON_LEFT_TAG = "iconLeft";
+    public static final String ICON_SELECT_TAG = "iconSelect";
+    public static final String BGCOLOR_TAG = "bgColor";
+    public static final String DATA_TAG = "menu";
+    public static final String TABICON_TAG = "img";
+    public static final String ICONS_TAG = "subMenu";
+
     private Bitmap button;
     private Bitmap menuBg;
     private Bitmap subMenuBg;
-    private Bitmap selectedFirstMenuBg;
-    private Bitmap selectedMenuBg;
+    private Bitmap iconLeft;
+    private Bitmap iconSelect;
     private Bitmap[] tabs;
+    private String bgColor;
+    private int type;
     private List<HashMap<String,Object>> data;
     
     public Bitmap[] getTabs() {
         return tabs;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public void setTabs(Bitmap[] tabs) {
         this.tabs = tabs;
     }
@@ -48,17 +61,24 @@ public class CircleBean {
     public void setSubMenuBg(Bitmap subMenuBg) {
         this.subMenuBg = subMenuBg;
     }
-    public Bitmap getSelectedFirstMenuBg() {
-        return selectedFirstMenuBg;
+
+    public Bitmap getIconLeft() {
+        return iconLeft;
     }
-    public void setSelectedFirstMenuBg(Bitmap selectedFirstMenuBg) {
-        this.selectedFirstMenuBg = selectedFirstMenuBg;
+    public void setIconLeft(Bitmap iconLeft) {
+        this.iconLeft = iconLeft;
     }
-    public Bitmap getSelectedMenuBg() {
-        return selectedMenuBg;
+    public Bitmap getIconSelect() {
+        return iconSelect;
     }
-    public void setSelectedMenuBg(Bitmap selectedMenuBg) {
-        this.selectedMenuBg = selectedMenuBg;
+    public void setIconSelect(Bitmap iconSelect) {
+        this.iconSelect = iconSelect;
+    }
+    public String getBgColor() {
+        return bgColor;
+    }
+    public void setBgColor(String bgColor) {
+        this.bgColor = bgColor;
     }
     public List<HashMap<String, Object>> getData() {
         return data;

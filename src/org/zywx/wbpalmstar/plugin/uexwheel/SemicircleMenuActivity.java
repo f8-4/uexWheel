@@ -38,7 +38,7 @@ public class SemicircleMenuActivity extends Activity implements OnTouchListener 
 	private int bgWidth, bgHeight;
 	private Button bt_text;
 	private EUExWheel myEuexWheel;
-	private SemicircleBean bean;
+	private static SemicircleBean bean;
 	private int mCount;
 
 	public EUExWheel getMyEuexWheel() {
@@ -84,36 +84,16 @@ public class SemicircleMenuActivity extends Activity implements OnTouchListener 
 	}
 
 	private void initData() {
-	    bean = new SemicircleBean();
-        String data = getIntent().getStringExtra(EUExWheel.INTENT_JSON_DATA);
         int width = getIntent().getIntExtra(EUExWheel.INTENT_MENU_WIDTH, getScreenWidth());
         if(width <= 0){
             width = getScreenWidth();
         }
-        try {
-            JSONObject json = new JSONObject(data);
-            Bitmap bg = ImageUtil.getLocalImg(getApplicationContext(),
-                    json.get(bean.BGIMG_TAG).toString());
-            int w = bg.getWidth();
-            int h = bg.getHeight();
-            bgWidth = width;
-            bgHeight = h * width / w;
-            bean.setBgImg(bg);
-            List<UnitBean> list = new ArrayList<UnitBean>();
-            JSONArray array = json.getJSONArray(bean.DATA_TAG);
-            mCount = array.length();
-            for (int i = 0; i < array.length(); i++) {
-                UnitBean item = new UnitBean();
-                JSONObject itemJson = (JSONObject) array.opt(i);
-                item.setTitle(itemJson.get(bean.TITLE_TAG).toString());
-                item.setIcon(ImageUtil.getLocalImg(getApplicationContext(),
-                        itemJson.get(bean.ICON_TAG).toString()));
-                list.add(item);
-            }
-            bean.setData(list);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Bitmap bg = bean.getBgImg();
+        int w = bg.getWidth();
+        int h = bg.getHeight();
+        bgWidth = width;
+        bgHeight = h * width / w;
+        mCount = bean.getData().size();
     }
 
     private int getScreenWidth() {
@@ -212,4 +192,8 @@ public class SemicircleMenuActivity extends Activity implements OnTouchListener 
 		}
 		return true;
 	}
+
+    public static void setData(SemicircleBean semicircleBean) {
+        bean = semicircleBean;
+    }
 }

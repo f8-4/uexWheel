@@ -1,7 +1,5 @@
 package org.zywx.wbpalmstar.plugin.uexwheel.util;
 
-import org.zywx.wbpalmstar.plugin.uexwheel.EUExWheel;
-
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -11,9 +9,13 @@ import android.widget.RelativeLayout.LayoutParams;
 
 public class CircleAnimation {
 
-	LayoutParams lp = EUExWheel.circleLp;
+	private LayoutParams lp;
 
-	// 进入动画
+    public void setLp(LayoutParams lp) {
+        this.lp = lp;
+    }
+
+    // 进入动画
 	public void startAnimationIN(ViewGroup viewGroup, int duration) {
 		Animation animation;
 		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1,
@@ -42,7 +44,7 @@ public class CircleAnimation {
 		Animation animation;
 		animation = new ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f,
 				Animation.ABSOLUTE, lp.width / 2, Animation.ABSOLUTE,
-				lp.height / 2);
+				lp.height);
 		animation.setFillAfter(true);
 		animation.setDuration(duration);
 		animation.setStartOffset(startOffSet);
@@ -55,7 +57,7 @@ public class CircleAnimation {
 		Animation animation;
 		animation = new ScaleAnimation(1.0f, 0.5f, 1.0f, 0.5f,
 				Animation.ABSOLUTE, lp.width / 2, Animation.ABSOLUTE,
-				lp.height / 2);
+				lp.height);
 		animation.setFillAfter(true);
 		animation.setDuration(duration);
 		animation.setStartOffset(startOffSet);
@@ -67,7 +69,7 @@ public class CircleAnimation {
 			final int duration, int startOffSet) {
 		Animation animation;
 		animation = new ScaleAnimation(1.0f, 0, 1.0f, 0, Animation.ABSOLUTE,
-				lp.width / 2, Animation.ABSOLUTE, lp.height / 2);
+				lp.width / 2, Animation.ABSOLUTE, lp.height);
 		animation.setFillAfter(true);
 		animation.setDuration(duration);
 		animation.setStartOffset(startOffSet);
@@ -85,7 +87,7 @@ public class CircleAnimation {
 			public void onAnimationEnd(Animation animation) {
 				animation = new ScaleAnimation(0, 1.0f, 0, 1.0f,
 						Animation.ABSOLUTE, lp.width / 2, Animation.ABSOLUTE,
-						lp.height / 2);
+						lp.height);
 				animation.setFillAfter(true);
 				animation.setDuration(duration);
 				animation.setStartOffset(200);

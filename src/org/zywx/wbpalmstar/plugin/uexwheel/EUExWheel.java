@@ -11,6 +11,7 @@ import org.zywx.wbpalmstar.engine.EBrowserView;
 import org.zywx.wbpalmstar.engine.universalex.EUExBase;
 import org.zywx.wbpalmstar.plugin.uexwheel.bean.CircleBean;
 import org.zywx.wbpalmstar.plugin.uexwheel.bean.QuartercircleBean;
+import org.zywx.wbpalmstar.plugin.uexwheel.bean.SemicircleBean;
 import org.zywx.wbpalmstar.plugin.uexwheel.bean.UnitBean;
 import org.zywx.wbpalmstar.plugin.uexwheel.util.ImageUtil;
 import org.zywx.wbpalmstar.plugin.uexwheel.util.SecondView.OnTurnplateListener;
@@ -38,7 +39,8 @@ import android.widget.TextView;
 
 public class EUExWheel extends EUExBase {
 
-    private static final String FUNC_SEMICIRCLE_CALLBACK = "uexWheel.cbSelect";
+    private static final String CALLBACK_SELECT = "uexWheel.cbSelect";
+    private static final String CALLBACK_ONCLICK = "uexWheel.onClick";
 	private static final String TAG_SEMICIRCLE = "EUExWheel_Semicircle";
 	private static final String TAG_QUARTERCIRCLE_POPMENU = "EUExWheel_Quartercircle_popmenu";
 	private static final String TAG_QUARTERCIRCLE_SECTOR = "EUExWheel_Quartercircle_sector";
@@ -78,6 +80,7 @@ public class EUExWheel extends EUExBase {
     
     private QuartercircleBean mQuartercircleBean;
     private CircleBean mCircleBean;
+    private SemicircleBean mSemicircleBean;
     public static LocalActivityManager mgr;
     public static RelativeLayout.LayoutParams circleLp;
     public static CircleCallback circleCallback;
@@ -139,7 +142,9 @@ public class EUExWheel extends EUExBase {
                                 PopButtonActivity popMenuActivity = (PopButtonActivity) mgr
                                         .getActivity(TAG_QUARTERCIRCLE_POPMENU);
                                 popMenuActivity.setMenuShowStatus(false);
-                                jsCallback(FUNC_SEMICIRCLE_CALLBACK, 1, 0, flag);
+                                String js = SCRIPT_HEADER + "if(" + CALLBACK_SELECT + "){"
+                                        + CALLBACK_SELECT + "(" + flag + SCRIPT_TAIL;
+                                mBrwView.loadUrl(js);
                             }
 
                             @Override
@@ -269,9 +274,10 @@ public class EUExWheel extends EUExBase {
 					return;
 				}
 				try {
+				    getSemicircleBeanData(mDataJson);
 					Intent intent = new Intent();
 					intent.setClass(mContext, SemicircleMenuActivity.class);
-					intent.putExtra(INTENT_JSON_DATA, mDataJson);
+					SemicircleMenuActivity.setData(mSemicircleBean);
 					intent.putExtra(INTENT_MENU_WIDTH, width);
 					Window window = mgr.startActivity(TAG_SEMICIRCLE, intent);
 					// 将EuexWheel的Context设置给要跳转到的activity
@@ -283,12 +289,14 @@ public class EUExWheel extends EUExBase {
 					lp.leftMargin = left;
 					lp.topMargin = top;
 					if (view != null) {
-						startAnimationIN((ViewGroup) view, 500);
-						addTopLayer(view, lp);
+						//startAnimationIN((ViewGroup) view, 500);
+		                addView2CurrentWindow(view, lp);
+						//addTopLayer(view, lp);
 					} else {
 						return;
 					}
 				} catch (Exception e) {
+				    e.printStackTrace();
 				}
 			}
 		});
@@ -356,6 +364,11 @@ public class EUExWheel extends EUExBase {
 	                    view.setTag(TAG_QUARTERCIRCLE_POPMENU);
 	                    int x = width + left - btnWidth;
 	                    int y = height + top - btnWidth;
+	                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+	                            btnWidth, btnWidth);
+	                    lp.leftMargin = x;
+	                    lp.topMargin = y;
+	                    //addView2CurrentWindow(view, lp);
 	                    addTopLayer(view, x, y, btnWidth, btnWidth);
 	                }
 	            }
@@ -367,30 +380,30 @@ public class EUExWheel extends EUExBase {
 	        mQuartercircleBean = new QuartercircleBean();
 	        try {
 	            JSONObject json = new JSONObject(mDataJson);
-	            Bitmap rootBg = ImageUtil.getLocalImg(mContext,
-	                    json.getString(mQuartercircleBean.ROOTBG_TAG));
-	            Bitmap subBg = ImageUtil.getLocalImg(mContext,
-	                    json.getString(mQuartercircleBean.SUBBG_TAG));
-	            Bitmap closeImg = ImageUtil.getLocalImg(mContext,
-	                    json.getString(mQuartercircleBean.CLOSEIMG_TAG));
-	            Bitmap openImg = ImageUtil.getLocalImg(mContext,
-	                    json.getString(mQuartercircleBean.OPENIMG_TAG));
-	            String textColor = json.getString(mQuartercircleBean.TEXTCOLOR_TAG);
+	            Bitmap rootBg = ImageUtil.getLocalImg(mContext,mBrwView,
+	                    json.getString(QuartercircleBean.ROOTBG_TAG));
+	            Bitmap subBg = ImageUtil.getLocalImg(mContext,mBrwView,
+	                    json.getString(QuartercircleBean.SUBBG_TAG));
+	            Bitmap closeImg = ImageUtil.getLocalImg(mContext,mBrwView,
+	                    json.getString(QuartercircleBean.CLOSEIMG_TAG));
+	            Bitmap openImg = ImageUtil.getLocalImg(mContext,mBrwView,
+	                    json.getString(QuartercircleBean.OPENIMG_TAG));
+	            String textColor = json.getString(QuartercircleBean.TEXTCOLOR_TAG);
 	            mQuartercircleBean.setRootBg(rootBg);
 	            mQuartercircleBean.setSubBg(subBg);
 	            mQuartercircleBean.setCloseImg(closeImg);
 	            mQuartercircleBean.setOpenImg(openImg);
-	            mQuartercircleBean.setOpenTitle(json.getString(mQuartercircleBean.OPENTITLE_TAG));
-	            mQuartercircleBean.setCloseTitle(json.getString(mQuartercircleBean.CLOSETITLE_TAG));
+	            mQuartercircleBean.setOpenTitle(json.getString(QuartercircleBean.OPENTITLE_TAG));
+	            mQuartercircleBean.setCloseTitle(json.getString(QuartercircleBean.CLOSETITLE_TAG));
 	            mQuartercircleBean.setTextColor(textColor);
 	            List<UnitBean> list = new ArrayList<UnitBean>();
-	            JSONArray array = json.getJSONArray(mQuartercircleBean.DATA_TAG);
+	            JSONArray array = json.getJSONArray(QuartercircleBean.DATA_TAG);
 	            for (int i = 0; i < array.length(); i++) {
 	                UnitBean item = new UnitBean();
 	                JSONObject itemJson = (JSONObject) array.opt(i);
-	                item.setTitle(itemJson.get(mQuartercircleBean.TITLE_TAG).toString());
-	                item.setIcon(ImageUtil.getLocalImg(mContext,
-	                        itemJson.get(mQuartercircleBean.ICON_TAG).toString()));
+	                item.setTitle(itemJson.get(QuartercircleBean.TITLE_TAG).toString());
+	                item.setIcon(ImageUtil.getLocalImg(mContext,mBrwView,
+	                        itemJson.get(QuartercircleBean.ICON_TAG).toString()));
 	                list.add(item);
 	            }
 	            mQuartercircleBean.setData(list);
@@ -403,33 +416,34 @@ public class EUExWheel extends EUExBase {
 	    mCircleBean = new CircleBean();
 	    try {
             JSONObject json = new JSONObject(jsonData);
-            mCircleBean.setButton(ImageUtil.getLocalImg(mContext, 
-                    json.getString(mCircleBean.BUTTON_TAG)));
-            mCircleBean.setMenuBg(ImageUtil.getLocalImg(mContext, 
-                    json.getString(mCircleBean.MENUBG_TAG)));
-            mCircleBean.setSubMenuBg(ImageUtil.getLocalImg(mContext, 
-                    json.getString(mCircleBean.SUBMENUBG_TAG)));
-            mCircleBean.setSelectedFirstMenuBg(ImageUtil.getLocalImg(mContext, 
-                    json.getString(mCircleBean.SELECTEDFIRSTMENUBG_TAG)));
-            mCircleBean.setSelectedMenuBg(ImageUtil.getLocalImg(mContext, 
-                    json.getString(mCircleBean.SELECTEDMENUBG_TAG)));
-            JSONArray jsonArray = json.getJSONArray(mCircleBean.DATA_TAG);
+            mCircleBean.setButton(ImageUtil.getLocalImg(mContext,mBrwView, 
+                    json.getString(CircleBean.BUTTON_TAG)));
+            mCircleBean.setMenuBg(ImageUtil.getLocalImg(mContext,mBrwView, 
+                    json.getString(CircleBean.MENUBG_TAG)));
+            mCircleBean.setSubMenuBg(ImageUtil.getLocalImg(mContext,mBrwView, 
+                    json.getString(CircleBean.SUBMENUBG_TAG)));
+            mCircleBean.setIconLeft(ImageUtil.getLocalImg(mContext,mBrwView, 
+                    json.getString(CircleBean.ICON_LEFT_TAG)));
+            mCircleBean.setIconSelect(ImageUtil.getLocalImg(mContext,mBrwView, 
+                    json.getString(CircleBean.ICON_SELECT_TAG)));
+            mCircleBean.setBgColor(json.getString(CircleBean.BGCOLOR_TAG));
+            JSONArray jsonArray = json.getJSONArray(CircleBean.DATA_TAG);
             Bitmap[] tabs = new Bitmap[jsonArray.length()];
             List<HashMap<String,Object>> tabIcons = new ArrayList<HashMap<String,Object>>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 HashMap<String, Object> data = new HashMap<String, Object>();
                 JSONObject itemjson = (JSONObject) jsonArray.opt(i);
-                String iconTab = itemjson.getString(mCircleBean.TABICON_TAG);
-                tabs[i] = ImageUtil.getLocalImg(mContext,
+                String iconTab = itemjson.getString(CircleBean.TABICON_TAG);
+                tabs[i] = ImageUtil.getLocalImg(mContext,mBrwView,
                         iconTab);
-                JSONArray iconsArray = itemjson.getJSONArray(mCircleBean.ICONS_TAG);
+                JSONArray iconsArray = itemjson.getJSONArray(CircleBean.ICONS_TAG);
                 int length = iconsArray.length();
                 Bitmap[] icons = new Bitmap[length];
                 for (int j = 0; j < length; j++) {
-                    icons[j] = ImageUtil.getLocalImg(mContext,
+                    icons[j] = ImageUtil.getLocalImg(mContext,mBrwView,
                             iconsArray.optString(j));
                 }
-                data.put(mCircleBean.ICONS_TAG, icons);
+                data.put(CircleBean.ICONS_TAG, icons);
                 tabIcons.add(data);
             }
             mCircleBean.setTabs(tabs);
@@ -438,7 +452,30 @@ public class EUExWheel extends EUExBase {
             e.printStackTrace();
         }
 	}
-	   
+	
+    private void getSemicircleBeanData(String jsonData) {
+        mSemicircleBean = new SemicircleBean();
+        try {
+            JSONObject json = new JSONObject(jsonData);
+            Bitmap bg = ImageUtil.getLocalImg(mContext,mBrwView,
+                    json.get(SemicircleBean.BGIMG_TAG).toString());
+            mSemicircleBean.setBgImg(bg);
+            List<UnitBean> list = new ArrayList<UnitBean>();
+            JSONArray array = json.getJSONArray(SemicircleBean.DATA_TAG);
+            for (int i = 0; i < array.length(); i++) {
+                UnitBean item = new UnitBean();
+                JSONObject itemJson = (JSONObject) array.opt(i);
+                item.setTitle(itemJson.get(SemicircleBean.TITLE_TAG).toString());
+                item.setIcon(ImageUtil.getLocalImg(mContext,mBrwView,
+                        itemJson.get(SemicircleBean.ICON_TAG).toString()));
+                list.add(item);
+            }
+            mSemicircleBean.setData(list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 	// 添加到最上层
 	private void addTopLayer(View view, RelativeLayout.LayoutParams parm) {
 		wm = ((Activity) mContext).getWindowManager();
@@ -478,22 +515,23 @@ public class EUExWheel extends EUExBase {
 	}
 
 	public void closeSemicircle() {
-		if (null != wm) {
+		//if (null != wm) {
 			if (isQuartercircleOpen && sContext != null) {
 				Window window = mgr.destroyActivity(TAG_SEMICIRCLE, true);
 				if (window != null) {
 					View view = window.getDecorView();
-					removeTopLayer(view);
+					removeViewFromCurrentWindow(view);
+					//removeTopLayer(view);
 				}
 				isQuartercircleOpen = false;
 			}
-		} else {
-			return;
-		}
+//		} else {
+//			return;
+//		}
 	}
 	
     private void closeQuartercircle() {
-        if (wm != null) {
+//        if (wm != null) {
             if(isSectorOpen){
                 Window window = mgr.destroyActivity(TAG_QUARTERCIRCLE_SECTOR, true);
                 if (window != null) {
@@ -506,15 +544,18 @@ public class EUExWheel extends EUExBase {
                 Window window = mgr.destroyActivity(TAG_QUARTERCIRCLE_POPMENU, true);
                 if (window != null) {
                     View view = window.getDecorView();
+                    //removeViewFromCurrentWindow(view);
                     removeTopLayer(view);
                 }
                 buttonShowStatus = false;
             }
-        }
+//        }
     }
 
 	public void getTag(String tag) {
-		jsCallback(FUNC_SEMICIRCLE_CALLBACK, 1, 0, tag);
+        String js = SCRIPT_HEADER + "if(" + CALLBACK_SELECT + "){"
+                + CALLBACK_SELECT + "(" + tag + SCRIPT_TAIL;
+        mBrwView.loadUrl(js);
 		closeSemicircle();
 	}
 
@@ -583,20 +624,25 @@ public class EUExWheel extends EUExBase {
                     errorCallback(0, 0, "传入参数错误");
                     return;
                 }
-                
                 getCircleBeanData(mDataJson);
+                int type = 0;
+                if(parm.length > 5){
+                    type = Integer.parseInt(parm[5]);
+                }
+                mCircleBean.setType(type);
                 Intent intent = new Intent();
                 intent.setClass(mContext, FirstActivity.class);
                 FirstActivity.setDataBean(mCircleBean);
+                circleLp = new RelativeLayout.LayoutParams(width, height);
+                circleLp.leftMargin = left;
+                circleLp.topMargin = top;
                 try {
                     mgr = ((ActivityGroup) mContext)
                             .getLocalActivityManager();
                     Window window = mgr.startActivity(TAG_CIRCLE_TAB, intent);
                     View view = window.getDecorView();
-                    circleLp = new RelativeLayout.LayoutParams(width, height);
-                    circleLp.leftMargin = left;
-                    circleLp.topMargin = top;
-                    addCircleTopLayer(view, circleLp);
+                    addView2CurrentWindow(view, circleLp);
+                    //addCircleTopLayer(view, circleLp);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -619,8 +665,16 @@ public class EUExWheel extends EUExBase {
             }
 
             @Override
-            public void getTag(String s) {
-                jsCallback(FUNC_SEMICIRCLE_CALLBACK, 1, 0, s);
+            public void getTag(int i, int j) {
+                String js;
+                if(i == -1){
+                    js = SCRIPT_HEADER + "if(" + CALLBACK_ONCLICK + "){"
+                            + CALLBACK_ONCLICK + "(" + 0 + SCRIPT_TAIL;
+                }else{
+                    js = SCRIPT_HEADER + "if(" + CALLBACK_SELECT + "){"
+                            + CALLBACK_SELECT + "(" + i + ", " + j + SCRIPT_TAIL;
+                }
+                mBrwView.loadUrl(js);
             }
         };
     }
@@ -636,9 +690,9 @@ public class EUExWheel extends EUExBase {
 	
     @SuppressWarnings("deprecation")
     private void closeCircle() {
-        if (null != wm) {
+        //if (null != wm) {
             if(isCircleIconOpen){
-                mListener.onPointTouch(null);
+                mListener.onPointTouch(-2);
                 isCircleIconOpen = false;
             }
             
@@ -646,15 +700,16 @@ public class EUExWheel extends EUExBase {
                 Window window = mgr.destroyActivity(TAG_CIRCLE_TAB, true);
                 if (window != null) {
                     View view = window.getDecorView();
-                    removeTopLayer(view);
+                    removeViewFromCurrentWindow(view);
+                    //removeTopLayer(view);
                 }
                 isCircleOpen = false;
             }
-        }
+        //}
     }
     
     // 添加到最上层
-    public void addCircleTopLayer(View view, RelativeLayout.LayoutParams parm) {
+    public void addCircleTopLayer1(View view, RelativeLayout.LayoutParams parm) {
         wm = ((Activity) mContext).getWindowManager();
         WindowManager.LayoutParams parms = new WindowManager.LayoutParams();
         parms.height = parm.height / 5;
@@ -690,7 +745,7 @@ public class EUExWheel extends EUExBase {
     public interface CircleCallback {
         public void addView(View v, RelativeLayout.LayoutParams parm);
         public void removeView(View v);
-        public void getTag(String s);
+        public void getTag(int iconIndex, int circleIndex);
     }
     public static void onPointTouchListener(OnTurnplateListener listener) {
         mListener = listener;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.zywx.wbpalmstar.base.BUtility;
+import org.zywx.wbpalmstar.engine.EBrowserView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,31 +16,35 @@ import android.view.View;
 
 public class ImageUtil {
 
-    public static Bitmap getLocalImg(Context ctx, String imgUrl) {
+    public static Bitmap getLocalImg(Context ctx, EBrowserView eBrw, String imgUrl) {
         
         if (imgUrl == null || imgUrl.length() == 0) {
             return null;
         }
+        String url = BUtility.makeRealPath(
+                BUtility.makeUrl(eBrw.getCurrentUrl(), imgUrl),
+                eBrw.getCurrentWidget().m_widgetPath,
+                eBrw.getCurrentWidget().m_wgtType);
         Bitmap bitmap = null;
         InputStream is = null;
         try {
-            if (imgUrl.startsWith(BUtility.F_Widget_RES_SCHEMA)) {
-                is = BUtility.getInputStreamByResPath(ctx, imgUrl);
+            if (url.startsWith(BUtility.F_Widget_RES_SCHEMA)) {
+                is = BUtility.getInputStreamByResPath(ctx, url);
                 bitmap = BitmapFactory.decodeStream(is);
-            } else if (imgUrl.startsWith(BUtility.F_FILE_SCHEMA)) {
-                imgUrl = imgUrl.replace(BUtility.F_FILE_SCHEMA, "");
-                bitmap = BitmapFactory.decodeFile(imgUrl);
-            } else if (imgUrl.startsWith(BUtility.F_Widget_RES_path)) {
+            } else if (url.startsWith(BUtility.F_FILE_SCHEMA)) {
+                url = url.replace(BUtility.F_FILE_SCHEMA, "");
+                bitmap = BitmapFactory.decodeFile(url);
+            } else if (url.startsWith(BUtility.F_Widget_RES_path)) {
                 try {
-                    is = ctx.getAssets().open(imgUrl);
+                    is = ctx.getAssets().open(url);
                     if (is != null) {
                         bitmap = BitmapFactory.decodeStream(is);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if (imgUrl.startsWith("/")) {
-                bitmap = BitmapFactory.decodeFile(imgUrl);
+            } else if (url.startsWith("/")) {
+                bitmap = BitmapFactory.decodeFile(url);
             }
         } catch (OutOfMemoryError e) {
             e.printStackTrace();
@@ -66,5 +71,13 @@ public class ImageUtil {
         }else{
             view.setBackground(d); 
         }
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

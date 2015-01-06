@@ -6,10 +6,10 @@ import android.graphics.Bitmap;
 
 public class SemicircleBean {
 
-    public final String DATA_TAG = "data";
-    public final String TITLE_TAG = "title";
-    public final String ICON_TAG = "image";
-    public final String BGIMG_TAG = "background";
+    public static final String DATA_TAG = "data";
+    public static final String TITLE_TAG = "title";
+    public static final String ICON_TAG = "image";
+    public static final String BGIMG_TAG = "background";
     
     private Bitmap bgImg;
     private List<UnitBean> data;

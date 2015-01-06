@@ -6,18 +6,17 @@ import android.graphics.Bitmap;
 
 public class QuartercircleBean {
 
-    public final String DATA_TAG = "data";
-    public final String TITLE_TAG = "title";
-    public final String ICON_TAG = "image";
-    public final String OPENIMG_TAG = "openImg";
-    public final String CLOSEIMG_TAG = "closeImg";
-    public final String ROOTBG_TAG = "rootBg";
-    public final String SUBBG_TAG = "subBg";
-    public final String OPENTITLE_TAG = "openTitle";
-    public final String CLOSETITLE_TAG = "closeTitle";
-    public final String TEXTCOLOR_TAG = "textColor";
-    
-    
+    public static final String DATA_TAG = "data";
+    public static final String TITLE_TAG = "title";
+    public static final String ICON_TAG = "image";
+    public static final String OPENIMG_TAG = "openImg";
+    public static final String CLOSEIMG_TAG = "closeImg";
+    public static final String ROOTBG_TAG = "rootBg";
+    public static final String SUBBG_TAG = "subBg";
+    public static final String OPENTITLE_TAG = "openTitle";
+    public static final String CLOSETITLE_TAG = "closeTitle";
+    public static final String TEXTCOLOR_TAG = "textColor";
+
     private Bitmap openImg;
     private Bitmap closeImg;
     private Bitmap rootBg;
