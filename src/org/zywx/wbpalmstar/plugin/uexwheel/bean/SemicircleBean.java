@@ -13,16 +13,31 @@ public class SemicircleBean {
     
     private Bitmap bgImg;
     private List<UnitBean> data;
+    private boolean isValid = true;
+
+    public boolean isValid() {
+		return isValid;
+	}
     public List<UnitBean> getData() {
         return data;
     }
     public void setData(List<UnitBean> data) {
+    	for (int i = 0; i < data.size(); i++) {
+    		if(!data.get(i).isValid()){
+        		this.isValid = false;
+        		return;
+        	}
+		}
         this.data = data;
     }
     public Bitmap getBgImg() {
         return bgImg;
     }
     public void setBgImg(Bitmap bgImg) {
+    	if(bgImg == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.bgImg = bgImg;
     }
     public String getTitle(int index) {

@@ -24,6 +24,11 @@ public class QuartercircleBean {
     private String openTitle;
     private String closeTitle;
     private String textColor;
+    private boolean isValid = true;
+
+    public boolean isValid() {
+		return isValid;
+	}
     public String getTextColor() {
         return textColor;
     }
@@ -35,6 +40,12 @@ public class QuartercircleBean {
         return data;
     }
     public void setData(List<UnitBean> data) {
+    	for (int i = 0; i < data.size(); i++) {
+        	if(!data.get(i).isValid()){
+        		this.isValid = false;
+        		return;
+        	}
+		}
         this.data = data;
     }
     public String getTitle(int index) {
@@ -47,24 +58,40 @@ public class QuartercircleBean {
         return openImg;
     }
     public void setOpenImg(Bitmap openImg) {
+    	if(openImg == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.openImg = openImg;
     }
     public Bitmap getCloseImg() {
         return closeImg;
     }
     public void setCloseImg(Bitmap closeImg) {
+    	if(closeImg == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.closeImg = closeImg;
     }
     public Bitmap getRootBg() {
         return rootBg;
     }
     public void setRootBg(Bitmap rootBg) {
+    	if(rootBg == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.rootBg = rootBg;
     }
     public Bitmap getSubBg() {
         return subBg;
     }
     public void setSubBg(Bitmap subBg) {
+    	if(subBg == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.subBg = subBg;
     }
     public String getOpenTitle() {

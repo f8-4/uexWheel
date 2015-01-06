@@ -184,7 +184,9 @@ public class SecondView extends View implements OnTouchListener {
 			point = AllPoints[index];
 			switch (mCount) {
             case 3:
-                if (point.angle <= 120) {
+            	if( point.angle <= 0){
+            		point.angle = 270;
+            	}else if (point.angle <= 120) {
                     point.angle = 30;
                 } else if (point.angle <= 240) {
                     point.angle = 150;
@@ -193,7 +195,9 @@ public class SecondView extends View implements OnTouchListener {
                 }
                 break;
             case 4:
-                if (point.angle <= 90) {
+            	if( point.angle <= 0){
+            		point.angle = 360;
+            	}else if (point.angle <= 90) {
                     point.angle = 90;
                 } else if (point.angle <= 180) {
                     point.angle = 180;
@@ -204,7 +208,9 @@ public class SecondView extends View implements OnTouchListener {
                 }
                 break;
             case 5:
-                if (point.angle <= 72) {
+            	if( point.angle <= 0){
+            		point.angle = 342;
+            	}else if (point.angle <= 72) {
                     point.angle = 54;
                 } else if (point.angle <= 144) {
                     point.angle = 126;
@@ -217,7 +223,9 @@ public class SecondView extends View implements OnTouchListener {
                 }
                 break;
             case 6:
-                if (point.angle <= 60) {
+            	if( point.angle <= 0){
+            		point.angle = 330;
+            	}else if (point.angle <= 60) {
                     point.angle = 30;
                 } else if (point.angle <= 120) {
                     point.angle = 90;

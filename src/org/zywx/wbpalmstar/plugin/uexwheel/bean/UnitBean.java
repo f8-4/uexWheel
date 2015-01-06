@@ -6,6 +6,11 @@ public class UnitBean {
 
     private String title;
     private Bitmap icon;
+    private boolean isValid = true;
+
+    public boolean isValid() {
+		return isValid;
+	}
     public String getTitle() {
         return title;
     }
@@ -16,6 +21,10 @@ public class UnitBean {
         return icon;
     }
     public void setIcon(Bitmap icon) {
+    	if(icon == null){
+    		this.isValid = false;
+    		return;
+    	}
         this.icon = icon;
     }
     

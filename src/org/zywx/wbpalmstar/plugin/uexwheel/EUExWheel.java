@@ -275,6 +275,10 @@ public class EUExWheel extends EUExBase {
 				}
 				try {
 				    getSemicircleBeanData(mDataJson);
+                    if(!mSemicircleBean.isValid()){
+                    	errorCallback(0, 0, "传入参数错误");
+                        return;
+                    }
 					Intent intent = new Intent();
 					intent.setClass(mContext, SemicircleMenuActivity.class);
 					SemicircleMenuActivity.setData(mSemicircleBean);
@@ -348,6 +352,10 @@ public class EUExWheel extends EUExBase {
 	                        return;
 	                    }
 	                    getQuartercircleData();
+	                    if(!mQuartercircleBean.isValid()){
+	                    	errorCallback(0, 0, "传入参数错误");
+	                        return;
+	                    }
 	                    if(btnWidth < 1){
 	                        btnWidth = width / 5;
 	                    }
@@ -625,6 +633,10 @@ public class EUExWheel extends EUExBase {
                     return;
                 }
                 getCircleBeanData(mDataJson);
+                if(!mCircleBean.isValid()){
+                	errorCallback(0, 0, "传入参数错误");
+                	return;
+                }
                 int type = 0;
                 if(parm.length > 5){
                     type = Integer.parseInt(parm[5]);
@@ -692,7 +704,9 @@ public class EUExWheel extends EUExBase {
     private void closeCircle() {
         //if (null != wm) {
             if(isCircleIconOpen){
-                mListener.onPointTouch(-2);
+            	if(mListener != null){
+                    mListener.onPointTouch(-2);
+            	}
                 isCircleIconOpen = false;
             }
             

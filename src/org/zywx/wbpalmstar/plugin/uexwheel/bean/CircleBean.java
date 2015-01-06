@@ -26,8 +26,13 @@ public class CircleBean {
     private String bgColor;
     private int type;
     private List<HashMap<String,Object>> data;
-    
-    public Bitmap[] getTabs() {
+    private boolean isValid = true;
+
+    public boolean isValid() {
+		return isValid;
+	}
+
+	public Bitmap[] getTabs() {
         return tabs;
     }
 
@@ -40,6 +45,12 @@ public class CircleBean {
     }
 
     public void setTabs(Bitmap[] tabs) {
+    	for (int i = 0; i < tabs.length; i++) {
+			if(tabs[i] == null){
+				isValid = false;
+				return;
+			}
+		}
         this.tabs = tabs;
     }
 
@@ -47,18 +58,30 @@ public class CircleBean {
         return button;
     }
     public void setButton(Bitmap button) {
+    	if(button == null){
+			isValid = false;
+			return;
+		}
         this.button = button;
     }
     public Bitmap getMenuBg() {
         return menuBg;
     }
     public void setMenuBg(Bitmap menuBg) {
+    	if(menuBg == null){
+			isValid = false;
+			return;
+		}
         this.menuBg = menuBg;
     }
     public Bitmap getSubMenuBg() {
         return subMenuBg;
     }
     public void setSubMenuBg(Bitmap subMenuBg) {
+    	if(subMenuBg == null){
+			isValid = false;
+			return;
+		}
         this.subMenuBg = subMenuBg;
     }
 
@@ -66,12 +89,20 @@ public class CircleBean {
         return iconLeft;
     }
     public void setIconLeft(Bitmap iconLeft) {
+    	if(iconLeft == null){
+			isValid = false;
+			return;
+		}
         this.iconLeft = iconLeft;
     }
     public Bitmap getIconSelect() {
         return iconSelect;
     }
     public void setIconSelect(Bitmap iconSelect) {
+    	if(iconSelect == null){
+			isValid = false;
+			return;
+		}
         this.iconSelect = iconSelect;
     }
     public String getBgColor() {

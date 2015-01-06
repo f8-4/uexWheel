@@ -75,7 +75,10 @@
             }
             uexWheel.onClick = function(data) {
                 appcan.window.open('API', 'uexWheel.html', 10);
-            }            
+            }
+            uexWidgetOne.cbError = function(opid, dataType, data) {
+                alert(data);
+            }
             //uexWidget.startWidget("123456789", "2", "pluginCallback", "plugin 插件调用");
         })
         appcan.button(".nav-btn", "btn-act", function(a, b) {
